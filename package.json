@@ -1,7 +1,7 @@
 {
   "name": "axe-puppeteer",
   "version": "0.0.1",
-  "description": "To be filled in",
+  "description": "Provides a chainable axe API for Puppeteer and automatically injects into all frames",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -10,8 +10,8 @@
     "lint": "tslint --project tsconfig.json --format codeFrame src/**/*.ts",
     "fmt": "prettier --write *.{md,js,json} src/**/*.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Adam Cutler",
+  "license": "MPL-2.0",
   "devDependencies": {
     "@types/node": "^10.12.9",
     "@types/puppeteer": "^1.10.0",
@@ -27,7 +27,9 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "axe-core": "^3.1.2",
+    "axe-core": "^3.1.2"
+  },
+  "peerDependencies": {
     "puppeteer": "^1.10.0"
   },
   "lint-staged": {
