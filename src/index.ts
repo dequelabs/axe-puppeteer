@@ -44,11 +44,15 @@ function injectAxe(
   return injections
 }
 
+function isPage(pageFrame: Page | Frame): pageFrame is Page {
+  return (<Page>pageFrame).mainFrame !== undefined
+}
+
 function getFrame(pageFrame: Page | Frame): Frame {
-  if ((pageFrame as Page).mainFrame) {
-    return (pageFrame as Page).mainFrame()
+  if (isPage(pageFrame)) {
+    return pageFrame.mainFrame()
   } else {
-    return pageFrame as Frame
+    return pageFrame
   }
 }
 
