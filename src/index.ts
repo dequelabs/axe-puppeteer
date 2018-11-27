@@ -1,6 +1,6 @@
 import Axe from 'axe-core'
 import { Browser, Frame, Page } from 'puppeteer-core'
-import { runAxe } from './browser'
+import { pageIsLoaded, runAxe } from './browser'
 
 type AnalyzeCB = (err: Error | null, result?: Axe.AxeResults) => void
 
@@ -54,9 +54,7 @@ async function waitForFrameReady(frame: Frame) {
   await frame.waitForSelector('html')
 
   // Check if the page is loaded.
-  const pageReady = await frame.evaluate(
-    () => document.readyState === 'complete'
-  )
+  const pageReady = await frame.evaluate(pageIsLoaded)
 
   if (!pageReady) {
     throw new Error('Page is not ready')
@@ -176,6 +174,8 @@ class AxeBuilderImpl {
     return this
   }
 
+  // TODO: Confirm that we don't have to resolve promise if given promise.
+  // Axe-webdriverjs always resolves the promise but doesn't reject if given callback
   public async analyze(): Promise<Axe.AxeResults>
   public async analyze<T extends AnalyzeCB>(
     callback?: T
@@ -187,6 +187,7 @@ class AxeBuilderImpl {
     const oldApi = callback && (callback as any).length === 1
 
     try {
+      // TODO: Don't fail if non-top-level frames aren't loaded
       await waitForFrameReady(this._frame)
 
       const injections = injectAxe(this._frame, this._source)
@@ -223,6 +224,7 @@ class AxeBuilderImpl {
 
 // Needs to be constructable with or without `new`, so this function enables
 // that behavior.
+// TODO: Fix `instanceof`
 function AxeBuilder(
   this: AxeBuilderImpl,
   page: Page | Frame,
