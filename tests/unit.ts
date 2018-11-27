@@ -13,13 +13,13 @@ describe('Builder', function() {
     })
 
     it('should define this._includes as an empty array', function() {
-      let includes = new Builder('bob')._includes
+      const includes = new Builder('bob')._includes
       assert.isArray(includes)
       assert.lengthOf(includes, 0)
     })
 
     it('should define this._excludes as an empty array', function() {
-      let excludes = new Builder('bob')._excludes
+      const excludes = new Builder('bob')._excludes
       assert.isArray(excludes)
       assert.lengthOf(excludes, 0)
     })
@@ -35,7 +35,7 @@ describe('Builder', function() {
 
   describe('include', function() {
     it('should push onto _includes', function() {
-      let builder = newEmptyBuilder()
+      const builder = newEmptyBuilder()
       builder.include('.bob')
       assert.lengthOf(builder._includes, 1)
       assert.lengthOf(builder._includes[0], 1)
@@ -49,7 +49,7 @@ describe('Builder', function() {
 
   describe('exclude', function() {
     it('should push onto _excludes', function() {
-      let builder = newEmptyBuilder()
+      const builder = newEmptyBuilder()
       builder.exclude('.bob')
       assert.lengthOf(builder._excludes, 1)
       assert.lengthOf(builder._excludes[0], 1)
@@ -63,7 +63,7 @@ describe('Builder', function() {
 
   describe('options', function() {
     it('should clobber _options with provided parameter', function() {
-      let builder = newEmptyBuilder()
+      const builder = newEmptyBuilder()
       builder.options('bob')
       assert.equal(builder._options, 'bob')
       builder.options('fred')
@@ -77,9 +77,9 @@ describe('Builder', function() {
 
   describe('disableRules', function() {
     it('should properly populate _options.rules with the provided parameter', function() {
-      let builder = newEmptyBuilder()
-      let colorRule = 'color-contrast'
-      let landmarkRule = 'landmark'
+      const builder = newEmptyBuilder()
+      const colorRule = 'color-contrast'
+      const landmarkRule = 'landmark'
       let expectedInternalState: any = {}
 
       builder.disableRules(colorRule)
@@ -165,7 +165,7 @@ describe('Builder', function() {
     // });
 
     it('should throw a useful error', function(done) {
-      let builder = newEmptyBuilder()
+      const builder = newEmptyBuilder()
 
       assert.throws(function() {
         builder.configure('cats')

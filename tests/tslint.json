@@ -1,0 +1,9 @@
+{
+  "defaultSeverity": "error",
+  "extends": "../tslint.json",
+  "jsRules": {},
+  "rules": {
+    "only-arrow-functions": false
+  },
+  "rulesDirectory": []
+}
