@@ -80,7 +80,7 @@ function normalizeContext(
   return ctx
 }
 
-class AxeBuilderImpl {
+class AxePuppeteerImpl {
   public _frame: Frame
   public _source?: string
   public _includes: string[][]
@@ -166,7 +166,7 @@ class AxeBuilderImpl {
     // Cast to any because we are asserting for javascript provided argument.
     if (typeof (config as any) !== 'object') {
       throw new Error(
-        'AxeBuilder needs an object to configure. See axe-core configure API.'
+        'AxePuppeteer needs an object to configure. See axe-core configure API.'
       )
     }
 
@@ -225,23 +225,23 @@ class AxeBuilderImpl {
 // Needs to be constructable with or without `new`, so this function enables
 // that behavior.
 // TODO: Fix `instanceof`
-function AxeBuilder(
-  this: AxeBuilderImpl,
+function AxePuppeteer(
+  this: AxePuppeteerImpl,
   page: Page | Frame,
   source?: string
-): AxeBuilderImpl {
+): AxePuppeteerImpl {
   if (!new.target) {
-    return new AxeBuilderImpl(page, source)
+    return new AxePuppeteerImpl(page, source)
   }
 
-  const thisImpl = new AxeBuilderImpl(page, source)
+  const thisImpl = new AxePuppeteerImpl(page, source)
   Object.assign(this, thisImpl)
   // To satisfy Typescript.
   return thisImpl
 }
 Object.setPrototypeOf(
-  AxeBuilder,
-  Object.getPrototypeOf(AxeBuilderImpl)
+  AxePuppeteer,
+  Object.getPrototypeOf(AxePuppeteerImpl)
 )
 
 async function loadPage(
@@ -254,9 +254,9 @@ async function loadPage(
 
   await page.goto(url, opts)
 
-  return new AxeBuilderImpl(page.mainFrame(), source)
+  return new AxePuppeteerImpl(page.mainFrame(), source)
 }
-AxeBuilder.loadPage = loadPage
+AxePuppeteer.loadPage = loadPage
 
-exports = module.exports = AxeBuilder
-exports.default = AxeBuilder
+exports = module.exports = AxePuppeteer
+exports.default = AxePuppeteer
