@@ -1,0 +1,49 @@
+{
+  "name": "axe-puppeteer",
+  "version": "0.0.1",
+  "description": "To be filled in",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint --project tsconfig.json --format codeFrame src/**/*.ts",
+    "fmt": "prettier --write *.{md,js,json} src/**/*.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.12.9",
+    "@types/puppeteer": "^1.10.0",
+    "@types/puppeteer-core": "^1.9.0",
+    "eslint": "^5.9.0",
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.5",
+    "prettier": "^1.15.2",
+    "puppeteer-core": "^1.10.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "axe-core": "^3.1.2",
+    "puppeteer": "^1.10.0"
+  },
+  "lint-staged": {
+    "*.{md,js,json,css}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
