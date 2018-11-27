@@ -45,7 +45,7 @@ function injectAxe(
 }
 
 function isPage(pageFrame: Page | Frame): pageFrame is Page {
-  return (<Page>pageFrame).mainFrame !== undefined
+  return (pageFrame as any).mainFrame !== undefined
 }
 
 function getFrame(pageFrame: Page | Frame): Frame {
@@ -238,4 +238,4 @@ export async function loadPage(
 
 export default AxePuppeteer
 // CommonJS support
-module.exports = AxePuppeteer;
+module.exports = AxePuppeteer
