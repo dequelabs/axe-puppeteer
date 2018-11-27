@@ -17,13 +17,13 @@ jobs:
           key: v1-npm-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  unit_tests:
+  tests:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
           key: v1-npm-cache-{{ checksum "package.json" }}
-      - run: npm run test:unit
+      - run: npm run test
   lint:
     <<: *defaults
     steps:
@@ -45,7 +45,7 @@ workflows:
   build:
     jobs:
       - dependencies
-      - unit_tests:
+      - tests:
           requires:
             - dependencies
       - lint:
@@ -54,7 +54,7 @@ workflows:
       - release:
           requires:
             - dependencies
-            - unit_tests
+            - tests
             - lint
           filters:
             branches:
