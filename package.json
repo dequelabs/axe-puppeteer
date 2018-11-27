@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec --require source-map-support/register --compilers ts-node/register tests/**/*.ts",
-    "coverage": "nyc npm test",
+    "test": "mocha --reporter spec -r ts-node/register test/*.ts --recursive",
+    "coverage": "nyc mocha",
     "lint": "tslint --project tsconfig.json --format codeFrame src/**/*.ts",
     "fmt": "prettier --write *.{md,js,json} src/**/*.ts"
   },
@@ -57,24 +57,31 @@
       "pre-commit": "lint-staged"
     }
   },
+  "cache": false,
   "nyc": {
-    "checkCoverage": true,
+    "require": [
+      "ts-node/register"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "all": true,
+    "instrument": true,
+    "sourceMap": true,
     "reporter": [
       "text-summary",
       "html"
     ],
-    "require": [
-      "ts-node/register"
-    ],
     "statements": 85,
     "branches": 85,
     "functions": 85,
-    "lines": 85,
-    "all": true,
-    "sourceMap": true,
-    "instrument": true,
-    "include": [
-      "src"
-    ]
+    "lines": 85
   }
 }

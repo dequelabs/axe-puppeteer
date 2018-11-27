@@ -223,6 +223,7 @@ export class AxePuppeteer {
   }
 }
 
+// TODO: Also close the page
 export async function loadPage(
   browser: Browser,
   url: string,
