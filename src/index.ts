@@ -191,9 +191,6 @@ export class AxePuppeteer {
   public async analyze<T extends AnalyzeCB>(
     callback?: T
   ): Promise<Axe.AxeResults | void> {
-    // Flag to use old-style api.
-    const oldApi = callback && (callback as any).length === 1
-
     try {
       // TODO: Don't fail if non-top-level frames aren't loaded
       await ensureFrameReady(this._frame)
@@ -210,17 +207,13 @@ export class AxePuppeteer {
       )
 
       if (callback) {
-        if (oldApi) {
-          callback(axeResults)
-        } else {
-          callback(null, axeResults)
-        }
+        callback(null, axeResults)
         return
       } else {
         return axeResults
       }
     } catch (err) {
-      if (callback && !oldApi) {
+      if (callback) {
         callback(err)
         return
       } else {
