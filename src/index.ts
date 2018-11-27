@@ -84,7 +84,7 @@ function normalizeContext(
   return ctx
 }
 
-class AxePuppeteerImpl {
+export class AxePuppeteer {
   private _frame: Frame
   private _source?: string
   private _includes: string[][]
@@ -226,29 +226,6 @@ class AxePuppeteerImpl {
   }
 }
 
-// Needs to be constructable with or without `new`, so this function enables
-// that behavior.
-// TODO: Fix `instanceof`
-function AxePuppeteer(
-  this: AxePuppeteerImpl,
-  page: Page | Frame,
-  source?: string
-): AxePuppeteerImpl {
-  if (!new.target) {
-    return new AxePuppeteerImpl(page, source)
-  }
-
-  const thisImpl = new AxePuppeteerImpl(page, source)
-  Object.assign(this, thisImpl)
-  // To satisfy Typescript.
-  return thisImpl
-}
-
-Object.setPrototypeOf(
-  AxePuppeteer,
-  Object.getPrototypeOf(AxePuppeteerImpl)
-)
-
 export async function loadPage(
   browser: Browser,
   url: string,
@@ -259,11 +236,9 @@ export async function loadPage(
 
   await page.goto(url, opts)
 
-  return new AxePuppeteerImpl(page.mainFrame(), source)
+  return new AxePuppeteer(page.mainFrame(), source)
 }
-AxePuppeteer.loadPage = loadPage;
 
 export default AxePuppeteer
-
 // CommonJS support
 module.exports = AxePuppeteer;
