@@ -1,4 +1,4 @@
-import Axe from 'axe-core'
+import * as Axe from 'axe-core'
 import { Browser, Frame, Page } from 'puppeteer-core'
 import { pageIsLoaded, runAxe } from './browser'
 
@@ -11,25 +11,30 @@ function arrayify<T>(src: T | T[]): T[] {
   return src
 }
 
-function injectAxeModule(frame: Frame): Promise<any> {
+function injectAxeModule(frame: Frame): Promise<void> {
   return frame.addScriptTag({
-    path: 'node_modules/axe-core/axe.min.js'
+    path: require.resolve('axe-core')
   })
 }
-function injectAxeString(frame: Frame, source: string): Promise<any> {
+
+function injectAxeString(
+  frame: Frame,
+  source: string
+): Promise<void> {
   return frame.evaluate(source)
 }
+
 function injectAxe(
   frame: Frame,
   source?: string
-): Array<Promise<any>> {
+): Array<Promise<void>> {
   const injections = frame
     .childFrames()
     .map(subFrame => injectAxe(subFrame, source))
     .reduce((acc, arr) => acc.concat(arr), [])
 
-  let injectP: Promise<any>
-  if (source === undefined) {
+  let injectP: Promise<void>
+  if (!source) {
     injectP = injectAxeModule(frame)
   } else {
     injectP = injectAxeString(frame, source)
@@ -47,8 +52,7 @@ function getFrame(pageFrame: Page | Frame): Frame {
   }
 }
 
-// TBH this doesn't wait but instead just gives a nice error when it isn't ready.
-async function waitForFrameReady(frame: Frame) {
+async function ensureFrameReady(frame: Frame) {
   // Wait so that we know there is an execution context.
   // Assume that if we have an html node we have an execution context.
   await frame.waitForSelector('html')
@@ -81,12 +85,12 @@ function normalizeContext(
 }
 
 class AxePuppeteerImpl {
-  public _frame: Frame
-  public _source?: string
-  public _includes: string[][]
-  public _excludes: string[][]
-  public _options: Axe.RunOptions | null
-  public _config: Axe.Spec | null
+  private _frame: Frame
+  private _source?: string
+  private _includes: string[][]
+  private _excludes: string[][]
+  private _options: Axe.RunOptions | null
+  private _config: Axe.Spec | null
 
   constructor(pageFrame: Page | Frame, source?: string) {
     this._frame = getFrame(pageFrame)
@@ -188,7 +192,7 @@ class AxePuppeteerImpl {
 
     try {
       // TODO: Don't fail if non-top-level frames aren't loaded
-      await waitForFrameReady(this._frame)
+      await ensureFrameReady(this._frame)
 
       const injections = injectAxe(this._frame, this._source)
       await Promise.all(injections)
@@ -239,12 +243,13 @@ function AxePuppeteer(
   // To satisfy Typescript.
   return thisImpl
 }
+
 Object.setPrototypeOf(
   AxePuppeteer,
   Object.getPrototypeOf(AxePuppeteerImpl)
 )
 
-async function loadPage(
+export async function loadPage(
   browser: Browser,
   url: string,
   { opts, source }: { opts?: any; source?: string }
@@ -256,7 +261,9 @@ async function loadPage(
 
   return new AxePuppeteerImpl(page.mainFrame(), source)
 }
-AxePuppeteer.loadPage = loadPage
+AxePuppeteer.loadPage = loadPage;
 
-exports = module.exports = AxePuppeteer
-exports.default = AxePuppeteer
+export default AxePuppeteer
+
+// CommonJS support
+module.exports = AxePuppeteer;
