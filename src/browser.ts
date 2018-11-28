@@ -14,6 +14,17 @@ export function runAxe(
   if (config !== null) {
     axe.configure(config)
   }
+
+  const brandingConfig = {
+    branding: {
+      application: 'axe-puppeteer'
+    }
+  }
+  // Case needed since we only set `branding.application` and `branding` expects
+  // to also have a `brand` field.
+  // We don't set `brand` since `axe-webdriverjs` doesn't.
+  axe.configure(brandingConfig as Axe.Spec)
+
   return axe.run(context || document, options || {})
 }
 
