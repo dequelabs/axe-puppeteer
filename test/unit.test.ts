@@ -1,3 +1,5 @@
+// Adapter from axe-webdriverjs.
+// Ignores Typescript best practices due to that.
 import { assert } from 'chai'
 import { Frame } from 'puppeteer'
 import Builder from '../src/index'
