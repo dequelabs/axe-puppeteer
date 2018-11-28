@@ -1,8 +1,15 @@
 import Axe from 'axe-core'
 import { assert, expect } from 'chai'
+import { createServer } from 'http'
 import { Frame } from 'puppeteer'
 import * as sinon from 'sinon'
-import { AxePuppeteer, setupPuppeteer, setupServer } from './utils'
+import testListen from 'test-listen'
+import {
+  AxePuppeteer,
+  loadPage,
+  setupPuppeteer,
+  setupServer
+} from './utils'
 
 type SinonSpy = sinon.SinonSpy
 
@@ -32,7 +39,17 @@ describe('AxePuppeteer', function() {
   setupPuppeteer()
   setupServer()
 
-  // TODO: Alternate constructor
+  describe('convenience constructor', function() {
+    it('should handle pages for you', async function() {
+      const url = this.fixtureFileURL('index.html')
+      const results = await (await loadPage(
+        this.browser,
+        url
+      )).analyze()
+
+      expect(results).to.exist
+    })
+  })
 
   describe('constructor', function() {
     it('accepts a Page', async function() {
@@ -101,8 +118,28 @@ describe('AxePuppeteer', function() {
 
   // TODO: Disbale frames?
 
-  // TODO: Returns results promise
-  // TODO: Results callback
+  it("returns results through analyze's promise", async function() {
+    await this.page.goto(this.fixtureFileURL('index.html'))
+    const results = await new AxePuppeteer(this.page).analyze()
+    expect(results).to.exist
+    expect(results).to.have.property('passes')
+    expect(results).to.have.property('incomplete')
+    expect(results).to.have.property('inapplicable')
+    expect(results).to.have.property('violations')
+  })
+
+  it('returns results through the callback if passed', async function() {
+    await this.page.goto(this.fixtureFileURL('index.html'))
+    await new AxePuppeteer(this.page).analyze((err, results) => {
+      expect(err).to.be.null
+
+      expect(results).to.exist
+      expect(results).to.have.property('passes')
+      expect(results).to.have.property('incomplete')
+      expect(results).to.have.property('inapplicable')
+      expect(results).to.have.property('violations')
+    })
+  })
 
   it('lets axe-core errors bubble when using promise API', async function() {
     const axeSource = `
@@ -306,6 +343,16 @@ describe('AxePuppeteer', function() {
         .with.lengthOf(1)
       expect(results.violations[0]).to.have.property('id', 'foo')
     })
+
+    it('gives a helpful error when not passed an object', function() {
+      const axePup = new AxePuppeteer(this.page)
+
+      // Cast a string to a Spec to simulate incorrect usage with Javascript.
+      const jsNotASpec = ('not an object' as unknown) as Axe.Spec
+      expect(() => axePup.configure(jsNotASpec)).to.throw(
+        'needs an object'
+      )
+    })
   })
 
   describe('options', function() {
@@ -388,9 +435,49 @@ describe('AxePuppeteer', function() {
         ...results.violations
       ]
 
-      expect(
-        flatResults.find((r: Axe.Result) => r.id === 'region')
-      ).to.be.undefined()
+      expect(flatResults.find((r: Axe.Result) => r.id === 'region'))
+        .to.be.undefined
+    })
+  })
+
+  describe("when given a page that hasn't loaded", function() {
+    it('gives a helpful error', async function() {
+      let addr: string = ''
+
+      const server = createServer((req: any, res: any) => {
+        const html = `
+          <html>
+            <body>
+              <script async src="${addr}/wait.js"></script>
+            </body>
+          </html>
+        `
+        const js = 'document.write(2)'
+
+        if (req.url.indexOf('index') !== -1) {
+          res.writeHead(200, { 'Content-Type': 'text/html' })
+          res.write(html)
+          res.end()
+        } else {
+          setTimeout(() => {
+            res.writeHead(200, {
+              'Content-Type': 'application/javascript'
+            })
+            res.write(js)
+            res.end()
+          }, 3000)
+        }
+      })
+      addr = await testListen(server)
+
+      const gotoP = this.page.goto(`${addr}/index.html`)
+      const axePup = new AxePuppeteer(this.page)
+      ;(await expectAsync(() => axePup.analyze())).to.throw(
+        'Page is not ready'
+      )
+
+      gotoP.catch(() => ({}))
+      server.close()
     })
   })
 })

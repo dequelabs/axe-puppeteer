@@ -7,13 +7,13 @@ import * as path from 'path'
 import Puppeteer from 'puppeteer'
 import testListen from 'test-listen'
 import { promisify } from 'util'
-import AxePuppeteer from '../src/index'
+import AxePuppeteer, { loadPage } from '../src/index'
 
 export const fs = {
   readFile: promisify(fsOrig.readFile)
 }
 
-export { AxePuppeteer, Puppeteer }
+export { AxePuppeteer, Puppeteer, loadPage }
 
 export interface ITestFunc extends Context {
   page: Puppeteer.Page
