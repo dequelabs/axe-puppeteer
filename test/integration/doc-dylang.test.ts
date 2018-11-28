@@ -1,29 +1,21 @@
 // Adapter from axe-webdriverjs.
 // This test tests to make sure that a valid configuration works.
 
-import { Spec } from 'axe-core'
 import { expect } from 'chai'
-import * as fsOrig from 'fs'
-import { promisify } from 'util'
 import {
   AxePuppeteer,
+  customConfig,
   fixtureFilePath,
+  fs,
   setupPuppeteer
-} from './utils'
-
-const fs = {
-  readFile: promisify(fsOrig.readFile)
-}
+} from '../utils'
 
 describe('doc-dylang.html', function() {
   setupPuppeteer()
 
   it('should find violations with customized helpUrl', async function() {
     const file = fixtureFilePath('doc-dylang.html')
-    const configFile = fixtureFilePath('custom-rule-config.json')
-    const config = JSON.parse(
-      await fs.readFile(configFile, 'utf8')
-    ) as Spec
+    const config = await customConfig()
 
     await this.page.goto(`file://${file}`)
 
