@@ -227,7 +227,7 @@ export class AxePuppeteer {
 export async function loadPage(
   browser: Browser,
   url: string,
-  { opts, source }: { opts?: any; source?: string }
+  { opts, source }: { opts?: any; source?: string } = {}
 ) {
   const page = await browser.newPage()
   await page.setBypassCSP(true)
