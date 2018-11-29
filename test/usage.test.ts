@@ -116,6 +116,36 @@ describe('AxePuppeteer', function() {
     expect(calledSpies).to.have.lengthOf(4)
   })
 
+  it('injects custom axe source into nexted frames', async function() {
+    const axeSource = `
+      window.axe = {
+        run: () => Promise.resolve({}),
+        configure: () => {}
+      }
+    `
+
+    await this.page.goto(this.fixtureFileURL('nested-frames.html'))
+
+    const defaultInjectSpies = this.page
+      .frames()
+      .map((frame: Frame) => sinon.spy(frame, 'addScriptTag'))
+    const evalSpies = this.page
+      .frames()
+      .map((frame: Frame) => sinon.spy(frame, 'evaluate'))
+
+    await new AxePuppeteer(this.page, axeSource).analyze()
+
+    const calledDefaultSpies = defaultInjectSpies
+      .map((spy: SinonSpy) => spy.called)
+      .filter((called: boolean) => called)
+    expect(calledDefaultSpies).to.have.lengthOf(0)
+
+    const customInjectedSpies = evalSpies
+      .map((spy: SinonSpy) => spy.calledWith(axeSource))
+      .filter((called: boolean) => called)
+    expect(customInjectedSpies).to.have.lengthOf(4)
+  })
+
   // TODO: Disbale frames?
 
   it("returns results through analyze's promise", async function() {
