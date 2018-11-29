@@ -8,9 +8,13 @@ import { customConfig, fixtureFilePath } from '../utils'
 
 describe('doc-dylang.html', function() {
   before(async function() {
-    this.browser = await Puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    })
+    this.timeout(10000)
+
+    const args = []
+    if (process.env.CI) {
+      args.push('--no-sandbox', '--disable-setuid-sandbox')
+    }
+    this.browser = await Puppeteer.launch({ args })
   })
   after(async function() {
     await this.browser.close()
