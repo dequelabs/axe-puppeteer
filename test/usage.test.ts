@@ -1,17 +1,15 @@
 import Axe from 'axe-core'
 import { assert, expect } from 'chai'
+import express from 'express'
 import { createServer } from 'http'
-import { Frame } from 'puppeteer'
+import * as path from 'path'
+import Puppeteer from 'puppeteer'
 import * as sinon from 'sinon'
 import testListen from 'test-listen'
-import {
-  AxePuppeteer,
-  loadPage,
-  setupPuppeteer,
-  setupServer
-} from './utils'
+import AxePuppeteer, { loadPage } from '../src/index'
 
 type SinonSpy = sinon.SinonSpy
+type Frame = Puppeteer.Frame
 
 const ExpectAssertionVal = (false as true) && expect(null)
 type ExpectAssertion = typeof ExpectAssertionVal
@@ -36,8 +34,32 @@ async function expectAsyncToNotThrow(fn: () => Promise<any>) {
 }
 
 describe('AxePuppeteer', function() {
-  setupPuppeteer()
-  setupServer()
+  before(async function(this) {
+    this.browser = await Puppeteer.launch()
+  })
+  after(async function() {
+    await this.browser.close()
+  })
+  beforeEach(async function() {
+    this.page = await this.browser.newPage()
+  })
+  afterEach(async function() {
+    await this.page.close()
+  })
+  before(async function() {
+    // const app: express.Application = express()
+    const app: express.Application = express()
+    app.use(express.static(path.resolve(__dirname, 'fixtures')))
+    this.server = createServer(app)
+    this.addr = await testListen(this.server)
+
+    this.fixtureFileURL = (filename: string): string => {
+      return `${this.addr}/${filename}`
+    }
+  })
+  after(function() {
+    this.server.close()
+  })
 
   describe('convenience constructor', function() {
     it('handles creating a page for you', async function() {
@@ -56,7 +78,10 @@ describe('AxePuppeteer', function() {
       let pageCloseSpy: SinonSpy | undefined
 
       // Stub `Browser::newPage`
-      const newPageStub: sinon.SinonStub = sinon.stub(this.browser, 'newPage')
+      const newPageStub: sinon.SinonStub = sinon.stub(
+        this.browser,
+        'newPage'
+      )
       // Stub Calls the original, but adds a spy to the returned `Page`'s `close` method
       newPageStub.callsFake(async () => {
         const page = await newPage.bind(this.browser)()
@@ -72,9 +97,8 @@ describe('AxePuppeteer', function() {
         )).analyze()
 
         expect(results).to.exist
-        expect(pageCloseSpy).to.exist
-          .and.have.property('called')
-          .that.is.true
+        expect(pageCloseSpy).to.exist.and.have.property('called').that
+          .is.true
       } finally {
         // Make sure to restore `Browser::newPage`
         newPageStub.restore()

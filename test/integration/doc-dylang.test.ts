@@ -2,16 +2,23 @@
 // This test tests to make sure that a valid configuration works.
 
 import { expect } from 'chai'
-import {
-  AxePuppeteer,
-  customConfig,
-  fixtureFilePath,
-  fs,
-  setupPuppeteer
-} from '../utils'
+import Puppeteer from 'puppeteer'
+import AxePuppeteer from '../../src/index'
+import { customConfig, fixtureFilePath } from '../utils'
 
 describe('doc-dylang.html', function() {
-  setupPuppeteer()
+  before(async function(this) {
+    this.browser = await Puppeteer.launch()
+  })
+  after(async function() {
+    await this.browser.close()
+  })
+  beforeEach(async function() {
+    this.page = await this.browser.newPage()
+  })
+  afterEach(async function() {
+    await this.page.close()
+  })
 
   it('should find violations with customized helpUrl', async function() {
     const file = fixtureFilePath('doc-dylang.html')
