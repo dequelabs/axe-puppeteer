@@ -14,8 +14,8 @@ jobs:
           key: v2-npm-cache-{{ checksum "package.json" }}
 
       - run:
-        name: Install puppeteer dependencies
-        command: 'sh .circleci/setup_puppeteer.sh'
+          name: Install puppeteer dependencies
+          command: 'sh .circleci/setup_puppeteer.sh'
 
       - run: npm install
       - save_cache:
