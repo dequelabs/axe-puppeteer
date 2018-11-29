@@ -248,6 +248,30 @@ export class AxePuppeteer {
   }
 }
 
+// An instance of AxePuppeteer that owns a page and thus closes it after running axe.
+class OwningAxePuppeteer extends AxePuppeteer {
+  private page: Page
+
+  constructor(page: Page, source?: string) {
+    super(page, source)
+    this.page = page
+  }
+
+  public async analyze(): Promise<Axe.AxeResults>
+  public async analyze<T extends AnalyzeCB>(
+    callback?: T
+  ): Promise<void>
+  public async analyze<T extends AnalyzeCB>(
+    callback?: T
+  ): Promise<Axe.AxeResults | void> {
+    try {
+      return await super.analyze(callback)
+    } finally {
+      await this.page.close()
+    }
+  }
+}
+
 // TODO: Also close the page
 export async function loadPage(
   browser: Browser,
@@ -259,7 +283,7 @@ export async function loadPage(
 
   await page.goto(url, opts)
 
-  return new AxePuppeteer(page.mainFrame(), source)
+  return new OwningAxePuppeteer(page, source)
 }
 
 export default AxePuppeteer

@@ -40,7 +40,7 @@ describe('AxePuppeteer', function() {
   setupServer()
 
   describe('convenience constructor', function() {
-    it('should handle pages for you', async function() {
+    it('handles creating a page for you', async function() {
       const url = this.fixtureFileURL('index.html')
       const results = await (await loadPage(
         this.browser,
@@ -48,6 +48,37 @@ describe('AxePuppeteer', function() {
       )).analyze()
 
       expect(results).to.exist
+    })
+
+    it('closes the page for you', async function() {
+      // Grab the original `newPage` method
+      const newPage = this.browser.newPage.bind(this.browser)
+      let pageCloseSpy: SinonSpy | undefined
+
+      // Stub `Browser::newPage`
+      const newPageStub: sinon.SinonStub = sinon.stub(this.browser, 'newPage')
+      // Stub Calls the original, but adds a spy to the returned `Page`'s `close` method
+      newPageStub.callsFake(async () => {
+        const page = await newPage.bind(this.browser)()
+        pageCloseSpy = sinon.spy(page, 'close')
+        return page
+      })
+
+      try {
+        const url = this.fixtureFileURL('index.html')
+        const results = await (await loadPage(
+          this.browser,
+          url
+        )).analyze()
+
+        expect(results).to.exist
+        expect(pageCloseSpy).to.exist
+          .and.have.property('called')
+          .that.is.true
+      } finally {
+        // Make sure to restore `Browser::newPage`
+        newPageStub.restore()
+      }
     })
   })
 
