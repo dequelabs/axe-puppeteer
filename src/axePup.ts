@@ -80,9 +80,8 @@ function isPage(pageFrame: Page | Frame): pageFrame is Page {
 function getFrame(pageFrame: Page | Frame): Frame {
   if (isPage(pageFrame)) {
     return pageFrame.mainFrame()
-  } else {
-    return pageFrame
   }
+  return pageFrame
 }
 
 async function ensureFrameReady(frame: Frame) {
