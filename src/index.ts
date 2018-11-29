@@ -116,47 +116,47 @@ function normalizeContext(
 }
 
 export class AxePuppeteer {
-  private _frame: Frame
-  private _source?: string
-  private _includes: string[][]
-  private _excludes: string[][]
-  private _options: Axe.RunOptions | null
-  private _config: Axe.Spec | null
+  private frame: Frame
+  private source?: string
+  private includes: string[][]
+  private excludes: string[][]
+  private axeOptions: Axe.RunOptions | null
+  private config: Axe.Spec | null
 
   constructor(pageFrame: Page | Frame, source?: string) {
-    this._frame = getFrame(pageFrame)
-    this._source = source
-    this._includes = []
-    this._excludes = []
-    this._options = null
-    this._config = null
+    this.frame = getFrame(pageFrame)
+    this.source = source
+    this.includes = []
+    this.excludes = []
+    this.axeOptions = null
+    this.config = null
   }
 
   public include(selector: string | string[]): this {
     selector = arrayify(selector)
-    this._includes.push(selector)
+    this.includes.push(selector)
     return this
   }
 
   public exclude(selector: string | string[]): this {
     selector = arrayify(selector)
-    this._excludes.push(selector)
+    this.excludes.push(selector)
     return this
   }
 
   public options(options: Axe.RunOptions): this {
-    this._options = options
+    this.axeOptions = options
     return this
   }
 
   public withRules(rules: string | string[]): this {
     rules = arrayify(rules)
 
-    if (!this._options) {
-      this._options = {}
+    if (!this.axeOptions) {
+      this.axeOptions = {}
     }
 
-    this._options.runOnly = {
+    this.axeOptions.runOnly = {
       type: 'rule',
       values: rules
     }
@@ -167,11 +167,11 @@ export class AxePuppeteer {
   public withTags(tags: string | string[]): this {
     tags = arrayify(tags)
 
-    if (!this._options) {
-      this._options = {}
+    if (!this.axeOptions) {
+      this.axeOptions = {}
     }
 
-    this._options.runOnly = {
+    this.axeOptions.runOnly = {
       type: 'tag',
       values: tags
     }
@@ -182,8 +182,8 @@ export class AxePuppeteer {
   public disableRules(rules: string | string[]): this {
     rules = arrayify(rules)
 
-    if (!this._options) {
-      this._options = {}
+    if (!this.axeOptions) {
+      this.axeOptions = {}
     }
 
     const newRules: any = {}
@@ -192,7 +192,7 @@ export class AxePuppeteer {
         enabled: false
       }
     }
-    this._options.rules = newRules
+    this.axeOptions.rules = newRules
 
     return this
   }
@@ -205,7 +205,7 @@ export class AxePuppeteer {
       )
     }
 
-    this._config = config
+    this.config = config
     return this
   }
 
@@ -219,16 +219,16 @@ export class AxePuppeteer {
     callback?: T
   ): Promise<Axe.AxeResults | void> {
     try {
-      await ensureFrameReady(this._frame)
+      await ensureFrameReady(this.frame)
 
-      await injectAxe(this._frame, this._source)
+      await injectAxe(this.frame, this.source)
 
-      const context = normalizeContext(this._includes, this._excludes)
-      const axeResults = await this._frame.evaluate(
+      const context = normalizeContext(this.includes, this.excludes)
+      const axeResults = await this.frame.evaluate(
         runAxe,
-        this._config,
+        this.config,
         context,
-        this._options
+        this.axeOptions
       )
 
       if (callback) {
