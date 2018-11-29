@@ -1,6 +1,6 @@
 import * as Axe from 'axe-core'
 import { Browser, Page } from 'puppeteer-core'
-import { AxePuppeteer, AnalyzeCB } from './axePup'
+import { AnalyzeCB, AxePuppeteer } from './axePup'
 
 // An instance of AxePuppeteer that owns a page and thus closes it after running axe.
 class OwningAxePuppeteer extends AxePuppeteer {

@@ -2,7 +2,10 @@ import * as Axe from 'axe-core'
 import { Browser, Frame, Page } from 'puppeteer-core'
 import { pageIsLoaded, runAxe } from './browser'
 
-export type AnalyzeCB = (err: Error | null, result?: Axe.AxeResults) => void
+export type AnalyzeCB = (
+  err: Error | null,
+  result?: Axe.AxeResults
+) => void
 
 function arrayify<T>(src: T | T[]): T[] {
   if (!Array.isArray(src)) {
@@ -35,7 +38,9 @@ function injectAxeChild(
 
   const reportError = () => {
     // tslint:disable-next-line:no-console
-    console.error(`Failed to inject axe-core into frame (${frame.url()})`)
+    console.error(
+      `Failed to inject axe-core into frame (${frame.url()})`
+    )
   }
 
   let injectP: Promise<void>
@@ -51,10 +56,7 @@ function injectAxeChild(
   return injections
 }
 
-function injectAxe(
-  frame: Frame,
-  source?: string
-): Promise<void> {
+function injectAxe(frame: Frame, source?: string): Promise<void> {
   const injections = frame
     .childFrames()
     .map(subFrame => injectAxeChild(subFrame, source))
