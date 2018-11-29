@@ -24,13 +24,40 @@ function injectAxeString(
   return frame.evaluate(source)
 }
 
-function injectAxe(
+function injectAxeChild(
   frame: Frame,
   source?: string
 ): Array<Promise<void>> {
   const injections = frame
     .childFrames()
-    .map(subFrame => injectAxe(subFrame, source))
+    .map(subFrame => injectAxeChild(subFrame, source))
+    .reduce((acc, arr) => acc.concat(arr), [])
+
+  const reportError = () => {
+    // tslint:disable-next-line:no-console
+    console.error(`Failed to inject axe-core into frame (${frame.url()})`)
+  }
+
+  let injectP: Promise<void>
+  if (!source) {
+    injectP = injectAxeModule(frame)
+  } else {
+    injectP = injectAxeString(frame, source)
+  }
+
+  // Just print diagnostic if a child frame fails to load.
+  // Don't fully error since we aren't the top-level frame
+  injections.push(injectP.catch(reportError))
+  return injections
+}
+
+function injectAxe(
+  frame: Frame,
+  source?: string
+): Promise<void> {
+  const injections = frame
+    .childFrames()
+    .map(subFrame => injectAxeChild(subFrame, source))
     .reduce((acc, arr) => acc.concat(arr), [])
 
   let injectP: Promise<void>
@@ -41,7 +68,7 @@ function injectAxe(
   }
 
   injections.push(injectP)
-  return injections
+  return Promise.all(injections).then(() => undefined)
 }
 
 function isPage(pageFrame: Page | Frame): pageFrame is Page {
@@ -192,11 +219,9 @@ export class AxePuppeteer {
     callback?: T
   ): Promise<Axe.AxeResults | void> {
     try {
-      // TODO: Don't fail if non-top-level frames aren't loaded
       await ensureFrameReady(this._frame)
 
-      const injections = injectAxe(this._frame, this._source)
-      await Promise.all(injections)
+      await injectAxe(this._frame, this._source)
 
       const context = normalizeContext(this._includes, this._excludes)
       const axeResults = await this._frame.evaluate(
