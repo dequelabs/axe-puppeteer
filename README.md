@@ -61,7 +61,7 @@ Doing so will mean axe-puppeteer runs this version of axe-core, instead of
 the one installed as a dependency of axe-puppeteer.
 
 ```javascript
-const axeSource = fs.readFileSync('./axe-1.0.js', 'utf8')
+const axeSource = fs.readFileSync('./axe-3.0.js', 'utf8')
 const builder = new AxePuppeteer(page, axeSource)
 ```
 
@@ -85,7 +85,7 @@ new AxePuppeteer(page)
 
 ### AxePuppeteer#options(options: Object)
 
-Specifies options to be used by `axe.a11yCheck`.
+Specifies options to be used by `axe.run`.
 **Will override any other configured options, including calls to `withRules` and `withTags`.**
 See [axe-core API documentation](https://github.com/dequelabs/axe-core/blob/master/doc/API.md)
 for information on its structure.
