@@ -11,10 +11,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
+          key: v2-npm-cache-{{ checksum "package.json" }}
       - run: npm install
       - save_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
+          key: v2-npm-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
   tests:
@@ -22,21 +22,21 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
+          key: v2-npm-cache-{{ checksum "package.json" }}
       - run: npm run coverage
   lint:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
+          key: v2-npm-cache-{{ checksum "package.json" }}
       - run: npm run lint
   release:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
+          key: v2-npm-cache-{{ checksum "package.json" }}
       - run: npm config set "//registry.npmjs.org/:_authToken" $NPM_AUTH
       - run: npm publish
 
