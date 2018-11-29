@@ -14,10 +14,10 @@ class OwningAxePuppeteer extends AxePuppeteer {
   public async analyze(): Promise<Axe.AxeResults>
   public async analyze<T extends AnalyzeCB>(
     callback?: T
-  ): Promise<void>
+  ): Promise<Axe.AxeResults | null>
   public async analyze<T extends AnalyzeCB>(
     callback?: T
-  ): Promise<Axe.AxeResults | void> {
+  ): Promise<Axe.AxeResults | null> {
     try {
       return await super.analyze(callback)
     } finally {

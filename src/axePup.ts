@@ -220,10 +220,10 @@ export class AxePuppeteer {
   public async analyze(): Promise<Axe.AxeResults>
   public async analyze<T extends AnalyzeCB>(
     callback?: T
-  ): Promise<void>
+  ): Promise<Axe.AxeResults | null>
   public async analyze<T extends AnalyzeCB>(
     callback?: T
-  ): Promise<Axe.AxeResults | void> {
+  ): Promise<Axe.AxeResults | null> {
     try {
       await ensureFrameReady(this.frame)
 
@@ -239,17 +239,14 @@ export class AxePuppeteer {
 
       if (callback) {
         callback(null, axeResults)
-        return
-      } else {
-        return axeResults
       }
+      return axeResults
     } catch (err) {
       if (callback) {
         callback(err)
-        return
-      } else {
-        throw err
+        return null
       }
+      throw err
     }
   }
 }
