@@ -238,5 +238,3 @@ export async function loadPage(
 }
 
 export default AxePuppeteer
-// CommonJS support
-module.exports = AxePuppeteer
