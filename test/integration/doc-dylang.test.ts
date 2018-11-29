@@ -7,7 +7,7 @@ import AxePuppeteer from '../../src/index'
 import { customConfig, fixtureFilePath } from '../utils'
 
 describe('doc-dylang.html', function() {
-  before(async function(this) {
+  before(async function() {
     this.browser = await Puppeteer.launch()
   })
   after(async function() {
