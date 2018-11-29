@@ -6,10 +6,10 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec -r ts-node/register test/*.ts --recursive",
+    "test": "mocha",
     "coverage": "nyc mocha",
-    "lint": "tslint --project tsconfig.json --format codeFrame src/**/*.ts",
-    "fmt": "prettier --write *.{md,js,json} src/**/*.ts"
+    "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.ts'",
+    "fmt": "prettier --write '*'.{md,js,json} 'src/**/*.ts'"
   },
   "author": "Adam Cutler",
   "license": "MPL-2.0",
