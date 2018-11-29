@@ -25,8 +25,6 @@ using axe with Puppeteer. As such, it is required to pass an instance of a Puppe
 Here is an example of a script that will drive Puppeteer to this repository,
 perform analysis and then log results to the console.
 
-TODO: CSP Bypass note
-
 ```javascript
 const AxePuppeteer = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
@@ -41,15 +39,33 @@ const results = await new AxePuppeteer(page).analyze()
 console.log(results)
 ```
 
-### TODO: AxePuppeteer.loadPage
+## Bypassing Content Security Policy
+
+When trying to run axe, you might run into issues if the page you are checking
+has Content Security Policy enabled. To get around this, you must disable it
+through `Page#setBypassCSP` **before** navigating to the site.
+
+### loadPage(browser: Browser, url: string, { opts, source }: { opts?: any, source?: string } = {})
+
+An alternate constructor is available which opens a page and performs the CSP bypass for you.
+
+It closes the page after `analyze` is called.
+
+```
+const { loadPage } = require('axe-puppeteer')
+const puppeteer = require('puppeteer')
+
+const browser = await puppeteer.launch()
+const axeBuilder = await loadPage(browser, 'https://dequeuniversity.com/demo/mars/')
+const results = await axeBuilder.analyze()
+console.log(results)
+```
 
 ### AxePuppeteer(page: Frame | Page[, axeSource: string])
 
 Constructor for the AxePuppeteer helper.
 You must pass an instance of a Puppeteer `Frame` or `Page` as the first argument.
 Can be called with or without the `new` keyword.
-
-TODO: CSP Bypass note
 
 ```javascript
 const builder = new AxePuppeteer(page)
@@ -64,6 +80,8 @@ the one installed as a dependency of axe-puppeteer.
 const axeSource = fs.readFileSync('./axe-3.0.js', 'utf8')
 const builder = new AxePuppeteer(page, axeSource)
 ```
+
+Note that you might need to bypass the Content Security Policy in some cases.
 
 ### AxePuppeteer#include(selector: string | string[])
 
@@ -83,7 +101,7 @@ new AxePuppeteer(page)
   .exclude('.results-panel h2')
 ```
 
-### AxePuppeteer#options(options: Object)
+### AxePuppeteer#options(options: Axe.RunOptions)
 
 Specifies options to be used by `axe.run`.
 **Will override any other configured options, including calls to `withRules` and `withTags`.**
@@ -141,7 +159,7 @@ new AxePuppeteer(page)
   .disableRules('color-contrast')
 ```
 
-### AxePuppeteer#configure(config: Object)
+### AxePuppeteer#configure(config: Axe.Spec)
 
 Inject an axe configuration object to modify the ruleset before running Analyze.
 Subsequent calls to this method will invalidate previous ones by calling `axe.configure`
@@ -189,19 +207,3 @@ new AxePuppeteer(page).analyze(function(err, results) {
   console.log(results)
 })
 ```
-
-## Examples
-
-TODO
-
-<!-- This project has a couple integrations that demonstrate the ability and use of this module: -->
-<!--  -->
-<!-- 1. [Running a single rule](test/integration/doc-lang.js) -->
-<!-- 1. [Running against a page with frames](test/integration/frames.js) -->
-<!-- 1. [SauceLabs example](test/sauce/sauce.js) -->
-
-## Contributing
-
-TODO
-
-<!-- Read the [documentation on contributing](CONTRIBUTING.md) -->
