@@ -187,7 +187,12 @@ export class AxePuppeteer {
       this.axeOptions = {}
     }
 
-    const newRules: any = {}
+    interface IRulesObj {
+      [id: string]: {
+        enabled: boolean
+      }
+    }
+    const newRules: IRulesObj = {}
     for (const rule of rules) {
       newRules[rule] = {
         enabled: false
