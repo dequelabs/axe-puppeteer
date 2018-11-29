@@ -20,9 +20,10 @@ export function runAxe(
       application: 'axe-puppeteer'
     }
   }
-  // Case needed since we only set `branding.application` and `branding` expects
+  // Cast needed since we only set `branding.application` and `branding` expects
   // to also have a `brand` field.
   // We don't set `brand` since `axe-webdriverjs` doesn't.
+  // TODO: Once axe-core 3.1.3 is released remove the cast (as that release fixes the types)
   axe.configure(brandingConfig as Axe.Spec)
 
   return axe.run(context || document, options || {})
