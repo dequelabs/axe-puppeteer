@@ -35,7 +35,9 @@ async function expectAsyncToNotThrow(fn: () => Promise<any>) {
 
 describe('AxePuppeteer', function() {
   before(async function(this) {
-    this.browser = await Puppeteer.launch()
+    this.browser = await Puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    })
   })
   after(async function() {
     await this.browser.close()
