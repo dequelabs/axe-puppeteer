@@ -8,7 +8,7 @@
     "build": "tsc",
     "test": "mocha",
     "coverage": "nyc mocha",
-    "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.ts'",
+    "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "fmt": "prettier --write '*'.{md,js,json} 'src/**/*.ts'"
   },
   "author": "Adam Cutler",
