@@ -31,7 +31,6 @@
     "nyc": "^13.1.0",
     "prettier": "^1.15.2",
     "puppeteer": "^1.10.0",
-    "puppeteer-core": "^1.10.0",
     "sinon": "^7.1.1",
     "source-map-support": "^0.5.9",
     "test-listen": "^1.1.0",
