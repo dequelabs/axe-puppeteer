@@ -1,0 +1,9 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["../tslint.json", "tslint-no-unused-expression-chai"],
+  "jsRules": {},
+  "rules": {
+    "only-arrow-functions": false
+  },
+  "rulesDirectory": []
+}
