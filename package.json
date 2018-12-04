@@ -9,7 +9,8 @@
     "test": "mocha",
     "coverage": "nyc mocha",
     "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.ts' 'test/**/*.ts'",
-    "fmt": "prettier --write '*'.{md,js,json} 'src/**/*.ts'"
+    "fmt": "prettier --write '*'.{md,js,json} 'src/**/*.ts'",
+    "prepublishOnly": "npm run build"
   },
   "author": "Adam Cutler",
   "license": "MPL-2.0",
