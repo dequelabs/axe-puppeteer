@@ -1,0 +1,94 @@
+{
+  "name": "axe-puppeteer",
+  "version": "0.0.1",
+  "description": "Provides a chainable axe API for Puppeteer and automatically injects into all frames",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha",
+    "coverage": "nyc mocha",
+    "lint": "tslint --project tsconfig.json --format codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "fmt": "prettier --write '*'.{md,js,json} 'src/**/*.ts'",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Adam Cutler",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.10",
+    "@types/puppeteer": "^1.10.0",
+    "@types/puppeteer-core": "^1.9.0",
+    "@types/sinon": "^5.0.7",
+    "@types/test-listen": "^1.1.0",
+    "chai": "^4.2.0",
+    "eslint": "^5.9.0",
+    "express": "^4.16.4",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.0.5",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "prettier": "^1.15.2",
+    "puppeteer": "^1.10.0",
+    "sinon": "^7.1.1",
+    "source-map-support": "^0.5.9",
+    "test-listen": "^1.1.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-config-standard": "^8.0.1",
+    "tslint-no-unused-expression-chai": "^0.1.4",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "axe-core": "^3.1.2"
+  },
+  "peerDependencies": {
+    "puppeteer": "^1.10.0"
+  },
+  "lint-staged": {
+    "*.{md,js,json,css}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "src/browser.ts"
+    ],
+    "all": true,
+    "instrument": true,
+    "sourceMap": true,
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "statements": 85,
+    "branches": 85,
+    "functions": 85,
+    "lines": 85
+  }
+}
