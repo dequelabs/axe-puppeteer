@@ -2,9 +2,14 @@
 import * as Axe from 'axe-core'
 
 // Expect axe to be set up.
-// Tell Typescript that there should be a variable called `axe` that follows
+// Tell Typescript that there should be a global variable called `axe` that follows
 // the shape given by the `axe-core` typings (the `run` and `configure` functions).
-declare var axe: typeof Axe
+declare global {
+  // tslint:disable-next-line:interface-name
+  interface Window {
+    axe: typeof Axe
+  }
+}
 // Defined at top-level to clarify that it can't capture variables from outer scope.
 export function runAxe(
   config?: Axe.Spec,
@@ -12,7 +17,7 @@ export function runAxe(
   options?: Axe.RunOptions
 ) {
   if (config) {
-    axe.configure(config)
+    window.axe.configure(config)
   }
 
   const brandingConfig = {
@@ -24,9 +29,9 @@ export function runAxe(
   // to also have a `brand` field.
   // We don't set `brand` since `axe-webdriverjs` doesn't.
   // TODO: Once axe-core 3.1.3 is released remove the cast (as that release fixes the types)
-  axe.configure(brandingConfig as Axe.Spec)
+  window.axe.configure(brandingConfig as Axe.Spec)
 
-  return axe.run(context || document, options || {})
+  return window.axe.run(context || document, options || {})
 }
 
 export function pageIsLoaded() {
