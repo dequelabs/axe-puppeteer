@@ -1,5 +1,5 @@
 import * as Axe from 'axe-core'
-import { Browser, Frame, Page } from 'puppeteer-core'
+import { Browser, Frame, Page } from 'puppeteer'
 import { pageIsLoaded, runAxe } from './browser'
 import { AnalyzeCB } from './types'
 
