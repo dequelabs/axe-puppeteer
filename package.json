@@ -48,6 +48,9 @@
   "peerDependencies": {
     "puppeteer": "^1.10.0"
   },
+  "engines": {
+    "node": ">=6.4.0"
+  },
   "lint-staged": {
     "*.{md,js,json,css}": [
       "prettier --write",
