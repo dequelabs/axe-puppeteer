@@ -58,7 +58,7 @@ console.log(results)
 ### AxePuppeteer(page: Frame | Page[, axeSource: string])
 
 Constructor for the AxePuppeteer helper.
-You must pass an instance of a Puppeteer `Frame` or `Page` as the first argument. Cannot be called with or without the `new` keyword.
+You must pass an instance of a Puppeteer `Frame` or `Page` as the first argument. Cannot be called without the `new` keyword.
 
 ```javascript
 const builder = new AxePuppeteer(page)
