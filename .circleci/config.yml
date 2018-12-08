@@ -28,6 +28,7 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run build # smoke test
       - run: npm run coverage
   lint:
     <<: *defaults
