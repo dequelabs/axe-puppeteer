@@ -23,7 +23,6 @@
     "@types/sinon": "^5.0.7",
     "@types/test-listen": "^1.1.0",
     "chai": "^4.2.0",
-    "eslint": "^5.9.0",
     "express": "^4.16.4",
     "husky": "^1.2.0",
     "lint-staged": "^8.0.5",
