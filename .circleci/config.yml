@@ -1,0 +1,51 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:10-browsers-legacy
+  working_directory: ~/axe-puppeteer
+
+jobs:
+  dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-cache-{{ checksum "package.json" }}
+
+      - run:
+          name: Install puppeteer dependencies
+          command: 'sh .circleci/setup_puppeteer.sh'
+
+      - run: npm install
+      - save_cache:
+          key: v1-npm-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run build # smoke test
+      - run: npm run coverage
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-npm-cache-{{ checksum "package.json" }}
+      - run: npm run lint
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - dependencies
+      - tests:
+          requires:
+            - dependencies
+      - lint:
+          requires:
+            - dependencies
