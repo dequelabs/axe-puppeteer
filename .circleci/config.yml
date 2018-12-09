@@ -37,23 +37,6 @@ jobs:
       - restore_cache:
           key: v1-npm-cache-{{ checksum "package.json" }}
       - run: npm run lint
-  canary_release:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
-      - run: npm config set "//registry.npmjs.org/:_authToken" $NPM_AUTH
-      - run: .circleci/next-release.js
-      - run: npm publish --tag=next
-  release:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-npm-cache-{{ checksum "package.json" }}
-      - run: npm config set "//registry.npmjs.org/:_authToken" $NPM_AUTH
-      - run: npm publish
 
 workflows:
   version: 2
@@ -66,19 +49,3 @@ workflows:
       - lint:
           requires:
             - dependencies
-      - release:
-          requires:
-            - dependencies
-            - tests
-            - lint
-          filters:
-            branches:
-              only: master
-      - canary_release:
-          requires:
-            - dependencies
-            - tests
-            - lint
-          filters:
-            branches:
-              only: develop
