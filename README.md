@@ -35,6 +35,11 @@ const results = await new AxePuppeteer(page).analyze()
 console.log(results)
 ```
 
+Note: Usage examples make use of ES2017 async/await. Use of `await` can only be done in a function
+declared `async`. If your project does not support async/await, you can just directly use the promise
+`async` functions return. [Check here for more
+information.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+
 ## Bypassing Content Security Policy
 
 When trying to run axe, you might run into issues if the page you are checking has Content Security Policy enabled. To get around this, you must disable it through `Page#setBypassCSP` **before** navigating to the site.
