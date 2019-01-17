@@ -22,9 +22,10 @@ This module uses a chainable API to assist in injecting, configuring and analyzi
 Here is an example of a script that will drive Puppeteer to this repository, perform analysis and then log results to the console.
 
 ```js
-const AxePuppeteer = require('axe-puppeteer')
+const { AxePuppeteer } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
+// ... In async function
 const browser = await puppeteer.launch()
 const page = await browser.newPage()
 await page.setBypassCSP(true)
@@ -54,6 +55,7 @@ It closes the page after `analyze` is called.
 const { loadPage } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
+// ... In async function
 const browser = await puppeteer.launch()
 const axeBuilder = await loadPage(
   browser,
