@@ -22,17 +22,22 @@ This module uses a chainable API to assist in injecting, configuring and analyzi
 Here is an example of a script that will drive Puppeteer to this repository, perform analysis and then log results to the console.
 
 ```js
-const AxePuppeteer = require('axe-puppeteer')
+const { AxePuppeteer } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
-const browser = await puppeteer.launch()
-const page = await browser.newPage()
-await page.setBypassCSP(true)
+;(async () => {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    await page.setBypassCSP(true)
 
-await page.goto('https://dequeuniversity.com/demo/mars/')
+    await page.goto('https://dequeuniversity.com/demo/mars/')
 
-const results = await new AxePuppeteer(page).analyze()
-console.log(results)
+    const results = await new AxePuppeteer(page).analyze()
+    console.log(results)
+
+    await page.close()
+    await browser.close()
+})()
 ```
 
 Note: Usage examples make use of ES2017 async/await. Use of `await` can only be done in a function
@@ -54,13 +59,17 @@ It closes the page after `analyze` is called.
 const { loadPage } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
-const browser = await puppeteer.launch()
-const axeBuilder = await loadPage(
-  browser,
-  'https://dequeuniversity.com/demo/mars/'
-)
-const results = await axeBuilder.analyze()
-console.log(results)
+;(async () => {
+    const browser = await puppeteer.launch()
+    const axeBuilder = await loadPage(
+      browser,
+      'https://dequeuniversity.com/demo/mars/'
+    )
+    const results = await axeBuilder.analyze()
+    console.log(results)
+
+    await browser.close()
+})()
 ```
 
 ### AxePuppeteer(page: Frame | Page[, axeSource: string])
