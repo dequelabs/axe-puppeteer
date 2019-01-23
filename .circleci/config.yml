@@ -44,6 +44,7 @@ jobs:
       - restore_cache:
           key: v1-npm-cache-{{ checksum "package.json" }}
       - run: npm config set "//registry.npmjs.org/:_authToken" $NPM_AUTH
+      - run: npm whoami
       - run: .circleci/next-release.js
       - run: npm publish --tag=next
   release:
@@ -53,6 +54,7 @@ jobs:
       - restore_cache:
           key: v1-npm-cache-{{ checksum "package.json" }}
       - run: npm config set "//registry.npmjs.org/:_authToken" $NPM_AUTH
+      - run: npm whoami
       - run: npm publish
 
 workflows:
