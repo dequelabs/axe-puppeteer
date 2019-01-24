@@ -3,7 +3,7 @@
 [![Join the axe-core chat at https://gitter.im/dequelabs/axe-core](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dequelabs/axe-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Version](https://img.shields.io/npm/v/axe-puppeteer.svg)](https://www.npmjs.com/package/axe-puppeteer)
 [![License](https://img.shields.io/npm/l/axe-puppeteer.svg)](LICENSE)
-[![CircleCI Build](https://circleci.com/gh/dequelabs/axe-puppeteer/tree/master.svg?style=svg)](https://circleci.com/gh/dequelabs/axe-puppeteer/tree/master)
+[![CircleCI Build](https://circleci.com/gh/dequelabs/axe-puppeteer.svg?style=svg)](https://circleci.com/gh/dequelabs/axe-puppeteer)
 
 Provides a chainable axe API for Puppeteer and automatically injects into all frames.
 
