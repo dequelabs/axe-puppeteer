@@ -2,6 +2,10 @@
   "name": "axe-puppeteer",
   "version": "0.1.0",
   "description": "Provides a chainable axe API for Puppeteer and automatically injects into all frames",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dequelabs/axe-puppeteer.git"
+  },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
