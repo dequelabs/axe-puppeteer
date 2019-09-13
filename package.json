@@ -37,7 +37,7 @@
     "sinon": "^7.3.2",
     "source-map-support": "^0.5.9",
     "test-listen": "^1.1.0",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",
     "tslint-config-standard": "^8.0.1",
