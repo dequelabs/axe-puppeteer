@@ -70,10 +70,9 @@ describe('AxePuppeteer', function() {
   describe('convenience constructor', function() {
     it('handles creating a page for you', async function() {
       const url = this.fixtureFileURL('index.html')
-      const results = await (await loadPage(
-        this.browser,
-        url
-      )).analyze()
+      const results = await (
+        await loadPage(this.browser, url)
+      ).analyze()
 
       expect(results).to.exist
     })
@@ -97,10 +96,9 @@ describe('AxePuppeteer', function() {
 
       try {
         const url = this.fixtureFileURL('index.html')
-        const results = await (await loadPage(
-          this.browser,
-          url
-        )).analyze()
+        const results = await (
+          await loadPage(this.browser, url)
+        ).analyze()
 
         expect(results).to.exist
         expect(pageCloseSpy).to.exist.and.have.property('called').that
@@ -298,6 +296,31 @@ describe('AxePuppeteer', function() {
           .exclude('.exclude')
 
         await expectAsyncToNotThrow(() => axePip.analyze())
+      })
+    })
+
+    // See #58
+    describe('excluded with an array of strings', () => {
+      it('properly sets context.exclude', async function() {
+        const expected = ['.foo', '.bar', '.baz', '.qux']
+
+        const axeSource = `
+          window.axe = {
+            configure(){},
+            run({ exclude }){
+              return Promise.resolve({ exclude })
+            }
+          }
+        `
+
+        await this.page.goto(this.fixtureFileURL('context.html'))
+
+        const axePip = new AxePuppeteer(this.page, axeSource)
+          .include('.include')
+          .exclude(['.foo', '.bar', '.baz', '.qux'])
+
+        const { exclude: actual } = (await axePip.analyze()) as any
+        assert.deepEqual(actual[0], expected)
       })
     })
 
