@@ -1,5 +1,5 @@
 import * as Axe from 'axe-core'
-import { Browser, Frame, Page } from 'puppeteer'
+import { Browser, Frame, JSONObject, Page } from 'puppeteer'
 import { pageIsLoaded, runAxe } from './browser'
 import { AnalyzeCB } from './types'
 
@@ -226,9 +226,9 @@ export class AxePuppeteer {
       const context = normalizeContext(this.includes, this.excludes)
       const axeResults = await this.frame.evaluate(
         runAxe,
-        this.config,
-        context,
-        this.axeOptions
+        this.config as JSONObject,
+        context as JSONObject,
+        this.axeOptions as JSONObject
       )
 
       if (callback) {

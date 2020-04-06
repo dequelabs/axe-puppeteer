@@ -3,7 +3,7 @@
 [![Join the axe-core chat at https://gitter.im/dequelabs/axe-core](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dequelabs/axe-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Version](https://img.shields.io/npm/v/axe-puppeteer.svg)](https://www.npmjs.com/package/axe-puppeteer)
 [![License](https://img.shields.io/npm/l/axe-puppeteer.svg)](LICENSE)
-[![CircleCI Build](https://circleci.com/gh/dequelabs/axe-puppeteer/tree/master.svg?style=svg)](https://circleci.com/gh/dequelabs/axe-puppeteer/tree/master)
+[![CircleCI Build](https://circleci.com/gh/dequelabs/axe-puppeteer.svg?style=svg)](https://circleci.com/gh/dequelabs/axe-puppeteer)
 
 Provides a chainable axe API for Puppeteer and automatically injects into all frames.
 
@@ -26,17 +26,17 @@ const { AxePuppeteer } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
 ;(async () => {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-    await page.setBypassCSP(true)
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.setBypassCSP(true)
 
-    await page.goto('https://dequeuniversity.com/demo/mars/')
+  await page.goto('https://dequeuniversity.com/demo/mars/')
 
-    const results = await new AxePuppeteer(page).analyze()
-    console.log(results)
+  const results = await new AxePuppeteer(page).analyze()
+  console.log(results)
 
-    await page.close()
-    await browser.close()
+  await page.close()
+  await browser.close()
 })()
 ```
 
@@ -60,15 +60,15 @@ const { loadPage } = require('axe-puppeteer')
 const puppeteer = require('puppeteer')
 
 ;(async () => {
-    const browser = await puppeteer.launch()
-    const axeBuilder = await loadPage(
-      browser,
-      'https://dequeuniversity.com/demo/mars/'
-    )
-    const results = await axeBuilder.analyze()
-    console.log(results)
+  const browser = await puppeteer.launch()
+  const axeBuilder = await loadPage(
+    browser,
+    'https://dequeuniversity.com/demo/mars/'
+  )
+  const results = await axeBuilder.analyze()
+  console.log(results)
 
-    await browser.close()
+  await browser.close()
 })()
 ```
 

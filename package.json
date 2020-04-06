@@ -1,7 +1,11 @@
 {
   "name": "axe-puppeteer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Provides a chainable axe API for Puppeteer and automatically injects into all frames",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dequelabs/axe-puppeteer.git"
+  },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -18,22 +22,22 @@
     "@types/chai": "^4.1.7",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.10",
+    "@types/node": "^12.7.5",
     "@types/puppeteer": "^1.10.0",
-    "@types/sinon": "^5.0.7",
+    "@types/sinon": "^7.0.13",
     "@types/test-listen": "^1.1.0",
     "chai": "^4.2.0",
     "express": "^4.16.4",
     "husky": "^1.2.0",
-    "lint-staged": "^8.0.5",
+    "lint-staged": "^9.2.5",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "prettier": "^1.15.2",
     "puppeteer": "^1.10.0",
-    "sinon": "^7.1.1",
+    "sinon": "^7.3.2",
     "source-map-support": "^0.5.9",
     "test-listen": "^1.1.0",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",
     "tslint-config-standard": "^8.0.1",
@@ -41,10 +45,10 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "axe-core": "^3.1.2"
+    "axe-core": "^3.5.3"
   },
   "peerDependencies": {
-    "puppeteer": "^1.10.0"
+    "puppeteer": "^1.10.0 || ^2.0.0"
   },
   "engines": {
     "node": ">=6.4.0"
