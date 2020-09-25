@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/node:10-browsers-legacy
+    - image: circleci/node:10-browsers
   working_directory: ~/axe-puppeteer
 
 jobs:
