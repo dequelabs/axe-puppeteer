@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.1.1](https://github.com/dequelabs/axe-puppeteer/compare/v1.1.0...v1.1.1) (2020-10-02)
+## [1.1.1](https://github.com/dequelabs/axe-puppeteer/compare/v1.1.0...v1.1.1) (2020-10-02)
 
-### Bug Fixes
+## Bug Fixes
 
 - Allow future Puppeteer versions in peer dependencies ([#74](https://github.com/dequelabs/axe-puppeteer/issues/74)) ([1738b94](https://github.com/dequelabs/axe-puppeteer/commit/1738b946e9897ca3bb0ba0cd28a109a47cdee83e))
 
