@@ -1,10 +1,3 @@
-# [DEPRECATED] axe-puppeteer
-
-[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
-
-> This repository has been deprecated. The package has been moved to [axe-core-npm](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/puppeteer). The package will be available via NPM as [`@axe-core/puppeteer`](https://www.npmjs.com/package/@axe-core/puppeteer).
----
-
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
